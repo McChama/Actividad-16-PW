@@ -1,5 +1,5 @@
-let Nombres;
-let Correos;
+let Nombres = [];
+let Correos = [];
 
 /* Obtener elementos del localstorage */
 function ObtenerlocalStorage(){
