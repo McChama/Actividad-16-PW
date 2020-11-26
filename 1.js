@@ -1,27 +1,32 @@
-let Nombres;
-let Correos;
-
 /* Obtener elementos del localstorage */
 function ObtenerlocalStorage(){
     /* Variables de intercambio temporales */
-    let lSNombres = localStorage.getItem("Nombres");
     let lSCorreos = localStorage.getItem("Correos");
+    let lSNombres = localStorage.getItem("Nombres");
 
     /* Sino hay elementos en el localStorage, crea un array */
-    Nombres = lSNombres ? JSON.parse(lSNombres) : [];
-    Correos = lSCorreos ? JSON.parse(lSCorreos) : [];
+    let Correos = lSCorreos ? JSON.parse(lSCorreos) : [];
+    let Nombres = lSNombres ? JSON.parse(lSNombres) : [];
+    
+    return { Correos, Nombres }
 }
 
 /* Guargar arrays en el localStorage */
-function GuardarlocalStorage(){
+function GuardarlocalStorage(Correo, Nombre){
+    let { Correos, Nombres } = ObtenerlocalStorage();
+    Correos.push(Correo);
+    Nombres.push(Nombre);
+    
     localStorage.setItem("Nombres", JSON.stringify(Nombres));
     localStorage.setItem("Correos", JSON.stringify(Correos));
 }
 
 /* Guardar valor de inputs en los arrays */
 function ObtenerTexto(){
-    Nombres.push($("#nombre").val());
-    Correos.push($("#email").val());
+    let Correo = $("#email").val();
+    let Nombre = $("#nombre").val();
+    
+    return { Correo, Nombre }
 }
 
 /* Limpiar controles */
@@ -36,9 +41,8 @@ function LimpiarTabla(){$("#salida tr td").remove();}
 $(document).ready(function(){
     /* Boton guardar */
     $("#boton-guardar").click(function(){
-        ObtenerlocalStorage();
-        ObtenerTexto();
-        GuardarlocalStorage();
+        let { Correo, Nombre } = ObtenerTexto();
+        GuardarlocalStorage(Correo, Nombre);
         LimpiarControles();
     });
 
@@ -47,7 +51,7 @@ $(document).ready(function(){
 
     /* Boton ver */
     $("#boton-ver").click(function(){
-        ObtenerlocalStorage();
+        let { Correos, Nombres } = ObtenerlocalStorage();
         /* Limpiar tabla */
         LimpiarTabla();
 
